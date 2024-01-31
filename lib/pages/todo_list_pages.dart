@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 
+import '../Models/tasks.dart';
 import '../widgets/list_item.dart';
 
 class ToDoListPage extends StatefulWidget {
@@ -12,7 +13,7 @@ class ToDoListPage extends StatefulWidget {
 class _ToDoListPageState extends State<ToDoListPage> {
   final TextEditingController textControler = TextEditingController();
 
-  List<String> tasks = [];
+  List<Task> tasks = [];
 
   @override
   Widget build(BuildContext context) {
@@ -40,7 +41,11 @@ class _ToDoListPageState extends State<ToDoListPage> {
                     ElevatedButton(
                         onPressed: (){
                           setState(() {
-                            tasks.add(textControler.text);
+                            Task newTask = Task(
+                              task_txt: textControler.text,
+                              date: DateTime.now(),
+                            );
+                            tasks.add(newTask);
                           });
                           textControler.clear();
                         },
@@ -58,9 +63,9 @@ class _ToDoListPageState extends State<ToDoListPage> {
                   child: ListView(
                     shrinkWrap: true,
                     children: [
-                      for(String task in tasks)
+                      for(Task task in tasks)
                         ListItem(
-                          task_text: task,
+                          new_task: task,
                         )
                     ],
                   ),

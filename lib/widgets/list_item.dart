@@ -1,14 +1,17 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_slidable/flutter_slidable.dart';
+import 'package:intl/intl.dart';
+
+import '../Models/tasks.dart';
 
 class ListItem extends StatelessWidget {
-  const ListItem({super.key, required this.task_text});
+  const ListItem({super.key, required this.new_task});
 
-  final String task_text;
+  final Task new_task;
 
   @override
   Widget build(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.symmetric(vertical: 6),
+    return Slidable(
       child: Container(
         decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(5),
@@ -18,9 +21,11 @@ class ListItem extends StatelessWidget {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Text('data'),
             Text(
-              task_text,
+              new_task.date.toString(),
+            ),
+            Text(
+              new_task.task_txt,
               style: TextStyle(
                 fontSize: 16,
                 fontWeight: FontWeight.w600,
