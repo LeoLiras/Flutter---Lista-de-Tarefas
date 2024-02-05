@@ -14,6 +14,8 @@ class _ToDoListPageState extends State<ToDoListPage> {
   final TextEditingController textControler = TextEditingController();
 
   List<Task> tasks = [];
+  Task? deletedTask;
+  int? deletedPos;
 
   @override
   Widget build(BuildContext context) {
@@ -39,7 +41,7 @@ class _ToDoListPageState extends State<ToDoListPage> {
                     ),
                     SizedBox(width: 10),
                     ElevatedButton(
-                        onPressed: (){
+                        onPressed: () {
                           setState(() {
                             Task newTask = Task(
                               task_txt: textControler.text,
@@ -58,29 +60,35 @@ class _ToDoListPageState extends State<ToDoListPage> {
                         )),
                   ],
                 ),
-                SizedBox(height: 20,),
+                SizedBox(
+                  height: 20,
+                ),
                 Flexible(
                   child: ListView(
                     shrinkWrap: true,
                     children: [
-                      for(Task task in tasks)
+                      for (Task task in tasks)
                         ListItem(
                           new_task: task,
+                          deleteTask: deleteTask,
                         )
                     ],
                   ),
                 ),
-                SizedBox(height: 20,),
+                SizedBox(
+                  height: 20,
+                ),
                 Row(
                   children: [
                     Expanded(
-                      child: Text('Você possui ${tasks.length} tarefas pendentes.'),
+                      child: Text(
+                          'Você possui ${tasks.length} tarefas pendentes.'),
                     ),
                     SizedBox(
                       width: 10,
                     ),
                     ElevatedButton(
-                      onPressed: () {},
+                      onPressed: deleteAllConfirmation,
                       child: Text('Limpar tudo'),
                       style: ElevatedButton.styleFrom(
                           backgroundColor: Colors.blue,
@@ -94,5 +102,54 @@ class _ToDoListPageState extends State<ToDoListPage> {
         ),
       ),
     );
+  }
+
+  void deleteTask(Task task) {
+    deletedTask = task;
+    deletedPos = tasks.indexOf(task);
+
+    setState(() {
+      tasks.remove(task);
+    });
+
+    ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+      content: Text('Tarefa removida com sucesso!'),
+      backgroundColor: Colors.blue,
+      action: SnackBarAction(
+          label: 'Desfazer',
+          onPressed: () {
+            setState(() {
+              tasks.insert(deletedPos!, deletedTask!);
+            });
+          }),
+    ));
+  }
+
+  void deleteAllConfirmation() {
+    showDialog(
+      context: context,
+      builder: (context) => AlertDialog(
+        title: Text('Limpar Tudo?'),
+        content:
+            Text('Você tem certeza de que deseja limpar todas as tarefas?'),
+        actions: [
+          TextButton(
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+              child: Text('Cancelar')),
+          TextButton(onPressed: () {
+            Navigator.of(context).pop();
+            deleteAll();
+          }, child: Text('Limpar Tudo')),
+        ],
+      ),
+    );
+  }
+
+  void deleteAll(){
+    setState(() {
+      tasks.clear();
+    });
   }
 }

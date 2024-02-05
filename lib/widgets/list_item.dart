@@ -5,32 +5,50 @@ import 'package:intl/intl.dart';
 import '../Models/tasks.dart';
 
 class ListItem extends StatelessWidget {
-  const ListItem({super.key, required this.new_task});
+  const ListItem({
+    super.key,
+    required this.new_task,
+    required this.deleteTask,
+  });
 
   final Task new_task;
+  final Function(Task) deleteTask;
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      decoration: BoxDecoration(
-        borderRadius: BorderRadius.circular(5),
-        color: Colors.grey[200],
-      ),
-      padding: const EdgeInsets.all(8),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
+    return Slidable(
+      startActionPane: ActionPane(
+        motion: StretchMotion(),
         children: [
-          Text(
-            new_task.date.toString(),
-          ),
-          Text(
-            new_task.task_txt,
-            style: TextStyle(
-              fontSize: 16,
-              fontWeight: FontWeight.w600,
-            ),
-          ),
+          SlidableAction(
+            onPressed: deleteTask(new_task),
+            backgroundColor: Colors.red,
+            label: 'Delete',
+          )
         ],
+      ),
+      child: Container(
+        width: double.infinity,
+        decoration: BoxDecoration(
+          borderRadius: BorderRadius.circular(5),
+          color: Colors.grey[200],
+        ),
+        padding: const EdgeInsets.all(8),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Text(
+              new_task.date.toString(),
+            ),
+            Text(
+              new_task.task_txt,
+              style: TextStyle(
+                fontSize: 16,
+                fontWeight: FontWeight.w600,
+              ),
+            ),
+          ],
+        ),
       ),
     );
   }
