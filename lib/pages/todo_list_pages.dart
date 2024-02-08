@@ -114,8 +114,7 @@ class _ToDoListPageState extends State<ToDoListPage> {
       });
     });
 
-
-    /*ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+    ScaffoldMessenger.of(context).showSnackBar(SnackBar(
       content: Text('Tarefa removida com sucesso!'),
       backgroundColor: Colors.blue,
       action: SnackBarAction(
@@ -125,7 +124,7 @@ class _ToDoListPageState extends State<ToDoListPage> {
               tasks.insert(deletedPos!, deletedTask!);
             });
           }),
-    ));*/
+    ));
   }
 
   void deleteAllConfirmation() {
