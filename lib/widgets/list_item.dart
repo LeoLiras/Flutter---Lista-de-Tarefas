@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/scheduler.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
 import 'package:intl/intl.dart';
 
@@ -17,11 +18,13 @@ class ListItem extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Slidable(
-      startActionPane: ActionPane(
+      endActionPane: ActionPane(
         motion: StretchMotion(),
         children: [
           SlidableAction(
-            onPressed: deleteTask(new_task),
+            onPressed: (context) {
+              deleteTask(new_task);
+            },
             backgroundColor: Colors.red,
             label: 'Delete',
           )

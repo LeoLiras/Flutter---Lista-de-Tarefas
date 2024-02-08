@@ -108,11 +108,14 @@ class _ToDoListPageState extends State<ToDoListPage> {
     deletedTask = task;
     deletedPos = tasks.indexOf(task);
 
-    setState(() {
-      tasks.remove(task);
+    Future.delayed(Duration(microseconds: 500), () {
+      setState(() {
+        tasks.remove(task);
+      });
     });
 
-    ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+
+    /*ScaffoldMessenger.of(context).showSnackBar(SnackBar(
       content: Text('Tarefa removida com sucesso!'),
       backgroundColor: Colors.blue,
       action: SnackBarAction(
@@ -122,7 +125,7 @@ class _ToDoListPageState extends State<ToDoListPage> {
               tasks.insert(deletedPos!, deletedTask!);
             });
           }),
-    ));
+    ));*/
   }
 
   void deleteAllConfirmation() {
