@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:mylist/repositories/list_repository.dart';
 
 import '../Models/tasks.dart';
 import '../widgets/list_item.dart';
@@ -12,11 +13,23 @@ class ToDoListPage extends StatefulWidget {
 
 class _ToDoListPageState extends State<ToDoListPage> {
   final TextEditingController textControler = TextEditingController();
+  final Repository rep = Repository();
 
   List<Task> tasks = [];
   Task? deletedTask;
   int? deletedPos;
 
+  @override
+  void initState() {
+    super.initState();
+    
+    rep.getList().then((value) {
+      setState(() {
+        tasks = value;
+      });
+    });
+  }
+  
   @override
   Widget build(BuildContext context) {
     return SafeArea(
@@ -50,6 +63,7 @@ class _ToDoListPageState extends State<ToDoListPage> {
                             tasks.add(newTask);
                           });
                           textControler.clear();
+                          rep.saveList(tasks);
                         },
                         style: ElevatedButton.styleFrom(
                             backgroundColor: Colors.blue,
@@ -108,11 +122,11 @@ class _ToDoListPageState extends State<ToDoListPage> {
     deletedTask = task;
     deletedPos = tasks.indexOf(task);
 
-    Future.delayed(Duration(microseconds: 500), () {
-      setState(() {
-        tasks.remove(task);
-      });
+    setState(() {
+      tasks.remove(task);
     });
+
+    rep.saveList(tasks);
 
     ScaffoldMessenger.of(context).showSnackBar(SnackBar(
       content: Text('Tarefa removida com sucesso!'),
@@ -123,6 +137,7 @@ class _ToDoListPageState extends State<ToDoListPage> {
             setState(() {
               tasks.insert(deletedPos!, deletedTask!);
             });
+            rep.saveList(tasks);
           }),
     ));
   }
@@ -153,5 +168,6 @@ class _ToDoListPageState extends State<ToDoListPage> {
     setState(() {
       tasks.clear();
     });
+    rep.saveList(tasks);
   }
 }
