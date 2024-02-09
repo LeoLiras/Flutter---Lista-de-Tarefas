@@ -19,6 +19,8 @@ class _ToDoListPageState extends State<ToDoListPage> {
   Task? deletedTask;
   int? deletedPos;
 
+  String? error_message = null;
+
   @override
   void initState() {
     super.initState();
@@ -49,18 +51,28 @@ class _ToDoListPageState extends State<ToDoListPage> {
                           border: OutlineInputBorder(),
                           labelText: 'Insira uma tarefa',
                           hintText: 'Ex: Limpar a casa',
+                          errorText: error_message,
                         ),
                       ),
                     ),
                     SizedBox(width: 10),
                     ElevatedButton(
                         onPressed: () {
+
+                          if(textControler.text.isEmpty){
+                            setState(() {
+                              error_message = 'Escreva uma tarefa';
+                            });
+                            return;
+                          }
+
                           setState(() {
                             Task newTask = Task(
                               task_txt: textControler.text,
                               date: DateTime.now(),
                             );
                             tasks.add(newTask);
+                            error_message = null;
                           });
                           textControler.clear();
                           rep.saveList(tasks);
